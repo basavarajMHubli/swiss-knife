@@ -1,0 +1,49 @@
+set nocompatible    " use vim defaults
+set backspace=indent,eol,start
+set hlsearch        " highlight searches
+set ic              " case insensitive
+set history=50      " keep 50 lines of command line history
+set ruler           " show the cursor position all the time
+set showcmd         " display incomplete commands
+set incsearch       " do incremental searching
+set tabstop=4       " Set tabs to 3 spaces
+set shiftwidth=4
+set expandtab
+set autoindent    " turns it on
+set smartindent   " does the right thing (mostly) in programs
+set cindent       " stricter rules for C programs
+set mousehide
+set showmatch
+"set scrolloff=2     " keep 2 lines when scrolling
+set title           " show title in console title bar
+set ttyfast         " smoother changes
+set modeline        " last lines in document sets vim mode
+set nostartofline   " don't jump to first character when paging
+set whichwrap=b,s,h,l,<,>,[,]   " move freely between files
+syntax enable
+set t_Co=256   " This is may or may not needed.
+"colorscheme PaperColor
+set background=light
+set colorcolumn=80
+"colors for vimdiff
+highlight DiffAdd    ctermbg=yellow ctermfg=black
+highlight DiffDelete ctermbg=yellow ctermfg=black
+highlight DiffChange ctermbg=green  ctermfg=black
+highlight DiffText   ctermfg=blue
+
+highlight colorcolumn ctermbg=black
+
+" Highlighting trailing white space
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
+
+" Function to trim trailing whitespace
+fun! Trim()
+    let l:save = winsaveview()
+    %s/\s\+$//e
+    call winrestview(l:save)
+endfun
