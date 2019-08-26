@@ -1,6 +1,5 @@
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <stddef.h>
 #include "slist.h"
 
 void
@@ -18,12 +17,11 @@ list_node_init(struct s_list *node)
 }
 
 void
-list_insert(struct s_list **head, struct s_list *elem_node)
+list_insert(struct s_list *head, struct s_list *elem_node)
 {
-    struct s_list *cur = *head;
+    struct s_list *cur = head;
 
-    if (!(*head)) {
-        *head = elem_node;
+    if (!head) {
         return;
     }
 
@@ -36,18 +34,18 @@ list_insert(struct s_list **head, struct s_list *elem_node)
 }
 
 void
-list_remove(struct s_list **head, struct s_list *elem_node)
+list_remove(struct s_list *head, struct s_list *elem_node)
 {
-    struct s_list *cur = *head;
+    struct s_list *cur = head;
     struct s_list *prev = NULL;
 
-    if (!(*head)) {
+    if (!head) {
         return;
     }
 
     /* If first node is to be removed */
-    if (*head == elem_node) {
-        *head = (*head)->next;
+    if (head == elem_node) {
+        head = head->next;
         return;
     }
 
@@ -61,17 +59,4 @@ list_remove(struct s_list **head, struct s_list *elem_node)
         cur = cur->next;
     }
     return;
-}
-
-void
-print_list(struct s_list *head)
-{
-    struct s_list *cur = head;
-    //struct data *d = NULL;
-
-    while (cur) {
-        //d = GET_ELEM(cur, struct data, node);
-        //printf("Value %d\n", d->val);
-        cur = cur->next;
-    }
 }
