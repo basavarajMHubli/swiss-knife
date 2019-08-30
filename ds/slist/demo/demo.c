@@ -6,24 +6,21 @@
 struct employee {
     char name[64];
     int id;
-    struct s_list node;
+    struct s_node node;
 };
 
 int main()
 {
-    struct s_list list_head;
+    struct s_node list_head;
     struct employee e1, e2;
 
     // Initialize list head pointer
     list_init(&list_head);
 
-    // Initialize node pointer
-    list_node_init(&e1.node);
     strcpy(e1.name, "Basavaraj M. H.");
-    e1.id = 3;
+    e1.id = 2558;
 
     // Initialize node pointer
-    list_node_init(&e2.node);
     strcpy(e2.name, "John Doe");
     e2.id = 4;
 
@@ -31,20 +28,34 @@ int main()
     list_insert(&list_head, &e1.node);
     list_insert(&list_head, &e2.node);
 
+    printf("\nInserted node:\n");
     // Iterate over list and print values
-    struct s_list *cur = NULL;
-    FOR_EACH_NODE(cur, list_head)
+    struct s_node *cur = NULL;
+    FOR_EACH_NODE(cur, &list_head)
     {
         struct employee *e_ptr = GET_ELEM(cur, struct employee, node);
-        printf("Value: %s id: %d\n", e_ptr->name, e_ptr->id);
+        printf("Employee name(%s) id(%d)\n", e_ptr->name, e_ptr->id);
     }
 
     // Delete first node
     list_remove(&list_head, &e1.node);
 
+    printf("\nAfter removing first node:\n");
     // Iterate over list and print values
     cur = NULL;
-    FOR_EACH_NODE(cur, list_head)
+    FOR_EACH_NODE(cur, &list_head)
+    {
+        struct employee *e_ptr = GET_ELEM(cur, struct employee, node);
+        printf("Employee name(%s) id(%d)\n", e_ptr->name, e_ptr->id);
+    }
+
+    // Delete first node
+    list_remove(&list_head, &e2.node);
+
+    printf("\nAfter removing last node:\n");
+    // Iterate over list and print values
+    cur = NULL;
+    FOR_EACH_NODE(cur, &list_head)
     {
         struct employee *e_ptr = GET_ELEM(cur, struct employee, node);
         printf("Employee name(%s) id(%d)\n", e_ptr->name, e_ptr->id);
