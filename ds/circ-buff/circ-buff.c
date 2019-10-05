@@ -1,4 +1,12 @@
 
+/**
+ * @file circ-buff.c
+ * @brief
+ * @author Basavaraj M. Hubli
+ * @version 1.0
+ * @date 2019-09-25
+ */
+
 #include "circ-buff.h"
 #include <stdlib.h>
 #include <string.h>

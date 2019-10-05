@@ -1,4 +1,12 @@
 
+/**
+ * @file circ-buff.h
+ * @brief Circular buffer implementation
+ * @author Basavaraj M. Hubli
+ * @version 1.0
+ * @date 2019-09-25
+ */
+
 #ifndef __CIRC_BUF_H__
 #define __CIRC_BUF_H__
 
