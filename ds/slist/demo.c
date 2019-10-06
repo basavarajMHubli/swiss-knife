@@ -1,3 +1,10 @@
+/**
+ * @file demo.c
+ * @brief Demo code showing linked list api usage
+ * @author Basavaraj M. Hubli
+ * @version 1.0
+ * @date 2019-10-06
+ */
 
 #include <stdio.h>
 #include <string.h>

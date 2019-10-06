@@ -1,10 +1,4 @@
 
-#ifndef __SLIST_H__
-#define __SLIST_H__
-
-#include <stddef.h>
-#include <assert.h>
-
 /**
  * @file slist.h
  * @brief This implementation of single linked list is inspired from Openvswitch
@@ -12,6 +6,12 @@
  * @version 1.0
  * @date 2019-08-30
  */
+
+#ifndef __SLIST_H__
+#define __SLIST_H__
+
+#include <stddef.h>
+#include <assert.h>
 
 #define OFFSET_OF(type, member) (size_t)&(((type *)0)->member)
 #define GET_ELEM(node, type, member) \
