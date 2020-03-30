@@ -12,3 +12,4 @@ Contents:
 2. sorting      This directory contains various sorting algorithms
 3. xcopy        Python utility to take back up of directories
 4. misc_conf    Configurations files
+5. clogger      C library for controlled logging support
