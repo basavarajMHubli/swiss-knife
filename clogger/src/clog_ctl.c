@@ -23,11 +23,11 @@
 #define LOG_TYPE_SYSLOG     "syslog"
 
 /**
- * @brief 
+ * @brief API to send logging configuration changes
  *
- * @param cfg
+ * @param cfg new logging configuration
  *
- * @return 
+ * @return 0 for success, -1 for failure
  */
 static int
 cLogSendCmd(CLogCfg_t *cfg)
@@ -59,19 +59,20 @@ cLogSendCmd(CLogCfg_t *cfg)
 }
 
 /**
- * @brief 
+ * @brief Function to print help string
  */
 static void
 displayUsage(void)
 {
     fprintf(stderr, "Usage: ./clog_ctl -p <logger name> -t <log type> -l <log level>\n");
-    fprintf(stderr, "<log type>: console/syslog/file\n");
+    fprintf(stderr, "<log type>: console/syslog/file (multiple values "
+            "with , separation is supported)\n");
     fprintf(stderr, "<log level>: info/error/debug\n");
     return;
 }
 
 /**
- * @brief 
+ * @brief Tool to control logging configuration
  *
  * @param argc
  * @param argv[]
@@ -129,25 +130,35 @@ main(int argc, char *argv[])
 
     if (logType)
     {
-        if (!strcmp(logType, LOG_TYPE_CONSOLE))
-            cfg.cLogTypeMap |= CLOG_TYPE_CONSOLE;
-        else if (!strcmp(logType, LOG_TYPE_FILE))
-            cfg.cLogTypeMap |= CLOG_TYPE_FILE;
-        else if (!strcmp(logType, LOG_TYPE_SYSLOG))
-            cfg.cLogTypeMap |= CLOG_TYPE_SYSLOG;
-        else
+        char *token = NULL;
+        token = strtok(logType, ",");
+
+        while (token)
         {
-            fprintf(stderr, "Invalid Log type (%s). Aborting\n", logType);
-            exit(EXIT_FAILURE);
+            if (!strcmp(token, LOG_TYPE_CONSOLE))
+                cfg.cLogTypeMap |= CLOG_TYPE_CONSOLE;
+            else if (!strcmp(token, LOG_TYPE_FILE))
+                cfg.cLogTypeMap |= CLOG_TYPE_FILE;
+            else if (!strcmp(token, LOG_TYPE_SYSLOG))
+                cfg.cLogTypeMap |= CLOG_TYPE_SYSLOG;
+            else
+            {
+                fprintf(stderr, "Invalid Log type (%s). Aborting\n", logType);
+                exit(EXIT_FAILURE);
+            }
+            token = strtok(NULL, ",");
         }
     }
 
+    printf("Committing new configuration: appName(%s) type(%x) loglevel(%x)\n",
+           cfg.appName, cfg.cLogTypeMap, cfg.cLogLevel);
     ret = cLogSendCmd(&cfg);
     if (-1 == ret)
     {
         fprintf(stderr, "Failed to send cmd\n");
         exit(EXIT_FAILURE);
     }
+    printf("Done!!!\n");
 
     return 0;
 }

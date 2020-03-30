@@ -24,6 +24,6 @@ int main()
         sleep(1);
     }
 
-    cLogDeinit();
+    cLogDeinit(); // Dead code? I know!!!
     return 0;
 }

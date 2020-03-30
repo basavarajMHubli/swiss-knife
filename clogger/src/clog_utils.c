@@ -27,7 +27,7 @@ extern void cLogInitFile();
 extern void cLogInitSyslog();
 
 /**
- * @brief 
+ * @brief Function to enable signal handling for incoming msg q
  */
 static
 void cLogRegisterNotify(void)
@@ -46,7 +46,7 @@ void cLogRegisterNotify(void)
 }
 
 /**
- * @brief 
+ * @brief Handler function for new configuration
  *
  * @param signo
  */
@@ -89,7 +89,7 @@ void cLogCmdHandler(int signo)
 }
 
 /**
- * @brief 
+ * @brief Function to initialize configuration change commands
  */
 void
 cLogCmdHandlerInit(void)
