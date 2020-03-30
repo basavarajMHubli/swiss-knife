@@ -23,11 +23,11 @@
 #define LOG_TYPE_SYSLOG     "syslog"
 
 /**
- * @brief 
+ * @brief API to send logging configuration changes
  *
- * @param cfg
+ * @param cfg new logging configuration
  *
- * @return 
+ * @return 0 for success, -1 for failure
  */
 static int
 cLogSendCmd(CLogCfg_t *cfg)
@@ -59,7 +59,7 @@ cLogSendCmd(CLogCfg_t *cfg)
 }
 
 /**
- * @brief 
+ * @brief Function to print help string
  */
 static void
 displayUsage(void)
@@ -71,7 +71,7 @@ displayUsage(void)
 }
 
 /**
- * @brief 
+ * @brief Tool to control logging configuration
  *
  * @param argc
  * @param argv[]

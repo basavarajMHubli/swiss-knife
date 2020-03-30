@@ -28,6 +28,13 @@ char        *cLogBuf;
 
 extern void cLogCmdHandlerInit(void);
 
+/**
+ * @brief Function to prepend time stamp into string
+ *
+ * @param clogMsg string buffer
+ *
+ * @return offset/index pointing to end of timestamp string
+ */
 static int
 addTimeStamp(char *clogMsg)
 {
@@ -51,12 +58,22 @@ addTimeStamp(char *clogMsg)
     return off;
 }
 
+/**
+ * @brief Function to print log to console
+ *
+ * @param cLogMsg log prints
+ */
 static void
 cLogConsolePrint(const char *cLogMsg)
 {
     fprintf(stdout, "%s", cLogMsg);
 }
 
+/**
+ * @brief Function to print log to a file
+ *
+ * @param cLogMsg log prints
+ */
 static void
 cLogFilePrint(const char *cLogMsg)
 {
@@ -67,6 +84,11 @@ cLogFilePrint(const char *cLogMsg)
     (void)ret;
 }
 
+/**
+ * @brief Function to print log to syslog
+ *
+ * @param cLogMsg log prints
+ */
 static void
 cLogSyslogPrint(const char *cLogMsg)
 {
@@ -85,10 +107,10 @@ cLogSyslogPrint(const char *cLogMsg)
 }
 
 /**
- * @brief 
+ * @brief Function to print log to different log type
  *
- * @param fmt
- * @param args
+ * @param fmt std format specifiers
+ * @param args variable args for format specifiers
  */
 static void
 cLogModulePrint(const char *fmt, va_list args)
@@ -116,6 +138,9 @@ cLogModulePrint(const char *fmt, va_list args)
     return;
 }
 
+/**
+ * @brief Function to initialize file logging
+ */
 void
 cLogInitFile(void)
 {
@@ -134,6 +159,9 @@ cLogInitFile(void)
     return;
 }
 
+/**
+ * @brief Function to initialize syslog
+ */
 void
 cLogInitSyslog(void)
 {
@@ -142,13 +170,13 @@ cLogInitSyslog(void)
 }
 
 /**
- * @brief 
+ * @brief Initializes c-logger module
  *
- * @param appName
- * @param logType
- * @param cLogLevel
+ * @param appName Identifier for multi-instance usage
+ * @param logType CLOG_TYPE_*
+ * @param cLogLevel CLOG_LEVEL_*
  *
- * @return 
+ * @return CLogRet_t type
  */
 CLogRet_t
 cLogInit(const char *appName, int logType, int cLogLevel)
@@ -191,11 +219,11 @@ cLogInit(const char *appName, int logType, int cLogLevel)
 }
 
 /**
- * @brief 
+ * @brief Wrapper function for CLOG_*() macroes
  *
- * @param cLogLevel
- * @param fmt
- * @param ...
+ * @param cLogLevel CLOG_LEVEL_*
+ * @param fmt std format specifier
+ * @param ... variable arguments
  */
 void
 cLog(int cLogLevel, const char *fmt, ...)
@@ -210,6 +238,9 @@ cLog(int cLogLevel, const char *fmt, ...)
     }
 }
 
+/*
+ * @brief Function to deinitialize file logging
+ */
 static void
 cLogDeinitFile(void)
 {
@@ -217,6 +248,9 @@ cLogDeinitFile(void)
     cLogCfg->_isFileOpen = false;
 }
 
+/*
+ * @brief Function to deinitialize syslog logging
+ */
 static void
 cLogDeinitSyslog(void)
 {
@@ -225,7 +259,7 @@ cLogDeinitSyslog(void)
 }
 
 /**
- * @brief 
+ * @brief Deinitializes all log modules
  */
 void
 cLogDeinit(void)
