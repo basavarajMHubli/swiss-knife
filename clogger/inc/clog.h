@@ -6,10 +6,10 @@
  * @date 2020-03-24
  */
 
-/* TODO: Currently, console logging is implemented. syslog and file logging yet to be implemented */
-
 #ifndef __CLOG_H__
 #define __CLOG_H__
+
+#include <stdbool.h>
 
 #define CLOG_TYPE_CONSOLE (1 << 0)
 #define CLOG_TYPE_FILE    (1 << 1)
@@ -29,6 +29,11 @@ typedef struct cLogCfg_s
     char            appName[APP_NAME_LEN];   /* Application name */
     unsigned char   cLogTypeMap; /* bitmap: cLog_TYPE_* type */
     unsigned char   cLogLevel;   /* enum ClogLevel */
+
+    /* Internal usage */
+    int             _fileFd;
+    bool            _isFileOpen;
+    bool            _isSyslogOpen;
 } CLogCfg_t;
 
 /**

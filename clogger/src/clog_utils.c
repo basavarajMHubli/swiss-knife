@@ -2,8 +2,8 @@
  * @file clog_utils.c
  * @brief Utility file for c-logger
  * @author Basavaraj M. Hubli
- * @version 1.0
- * @date 2020-03-24
+ * @version 2.0
+ * @date 2020-03-30
  */
 
 #include <stdio.h>
@@ -22,6 +22,9 @@
 
 mqd_t mqDes;
 extern CLogCfg_t   *cLogCfg;
+
+extern void cLogInitFile();
+extern void cLogInitSyslog();
 
 /**
  * @brief 
@@ -65,6 +68,22 @@ void cLogCmdHandler(int signo)
 
     cLogCfg->cLogLevel = newCfg->cLogLevel;
     cLogCfg->cLogTypeMap = newCfg->cLogTypeMap;
+
+    if (cLogCfg->cLogTypeMap & CLOG_TYPE_FILE)
+    {
+        if (cLogCfg->_isFileOpen == false)
+        {
+            cLogInitFile();
+        }
+    }
+
+    if (cLogCfg->cLogTypeMap & CLOG_TYPE_SYSLOG)
+    {
+        if (cLogCfg->_isSyslogOpen == false)
+        {
+            cLogInitSyslog();
+        }
+    }
 
     cLogRegisterNotify();
 }
