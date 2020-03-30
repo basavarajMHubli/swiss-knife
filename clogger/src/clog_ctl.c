@@ -129,25 +129,35 @@ main(int argc, char *argv[])
 
     if (logType)
     {
-        if (!strcmp(logType, LOG_TYPE_CONSOLE))
-            cfg.cLogTypeMap |= CLOG_TYPE_CONSOLE;
-        else if (!strcmp(logType, LOG_TYPE_FILE))
-            cfg.cLogTypeMap |= CLOG_TYPE_FILE;
-        else if (!strcmp(logType, LOG_TYPE_SYSLOG))
-            cfg.cLogTypeMap |= CLOG_TYPE_SYSLOG;
-        else
+        char *token = NULL;
+        token = strtok(logType, ",");
+
+        while (token)
         {
-            fprintf(stderr, "Invalid Log type (%s). Aborting\n", logType);
-            exit(EXIT_FAILURE);
+            if (!strcmp(token, LOG_TYPE_CONSOLE))
+                cfg.cLogTypeMap |= CLOG_TYPE_CONSOLE;
+            else if (!strcmp(token, LOG_TYPE_FILE))
+                cfg.cLogTypeMap |= CLOG_TYPE_FILE;
+            else if (!strcmp(token, LOG_TYPE_SYSLOG))
+                cfg.cLogTypeMap |= CLOG_TYPE_SYSLOG;
+            else
+            {
+                fprintf(stderr, "Invalid Log type (%s). Aborting\n", logType);
+                exit(EXIT_FAILURE);
+            }
+            token = strtok(NULL, ",");
         }
     }
 
+    printf("Committing new configuration: appName(%s) type(%x) loglevel(%x)\n",
+           cfg.appName, cfg.cLogTypeMap, cfg.cLogLevel);
     ret = cLogSendCmd(&cfg);
     if (-1 == ret)
     {
         fprintf(stderr, "Failed to send cmd\n");
         exit(EXIT_FAILURE);
     }
+    printf("Done!!!\n");
 
     return 0;
 }
