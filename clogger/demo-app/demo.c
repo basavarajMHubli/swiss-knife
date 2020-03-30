@@ -14,7 +14,7 @@ int main()
 {
     int val = 5;
 
-    cLogInit("demo", CLOG_TYPE_FILE, CLOG_LEVEL_INFO);
+    cLogInit("demo", CLOG_TYPE_SYSLOG, CLOG_LEVEL_INFO);
 
     for (;;)
     {

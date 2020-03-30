@@ -81,7 +81,6 @@ void cLogCmdHandler(int signo)
     {
         if (cLogCfg->_isSyslogOpen == false)
         {
-            /* TODO */
             cLogInitSyslog();
         }
     }

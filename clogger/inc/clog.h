@@ -6,8 +6,6 @@
  * @date 2020-03-24
  */
 
-/* TODO: Currently, console logging is implemented. syslog and file logging yet to be implemented */
-
 #ifndef __CLOG_H__
 #define __CLOG_H__
 

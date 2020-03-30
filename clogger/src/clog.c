@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+#include <syslog.h>
 #include <time.h>
 #include "clog.h"
 
@@ -51,13 +52,13 @@ addTimeStamp(char *clogMsg)
 }
 
 static void
-cLogConsolePrint(char *cLogMsg)
+cLogConsolePrint(const char *cLogMsg)
 {
     fprintf(stdout, "%s", cLogMsg);
 }
 
 static void
-cLogFilePrint(char *cLogMsg)
+cLogFilePrint(const char *cLogMsg)
 {
     ssize_t ret;
 
@@ -67,8 +68,20 @@ cLogFilePrint(char *cLogMsg)
 }
 
 static void
-cLogSyslogPrint(char *cLogMsg)
+cLogSyslogPrint(const char *cLogMsg)
 {
+    int syslogLevel;
+
+    if (cLogCfg->cLogLevel == CLOG_LEVEL_INFO)
+        syslogLevel = LOG_INFO;
+    else if (cLogCfg->cLogLevel == CLOG_LEVEL_DEBUG)
+        syslogLevel = LOG_DEBUG;
+    else if (cLogCfg->cLogLevel == CLOG_LEVEL_ERROR)
+        syslogLevel = LOG_ERR;
+    else
+        syslogLevel = LOG_INFO;
+
+    syslog(syslogLevel, "%s", cLogMsg);
 }
 
 /**
@@ -98,7 +111,6 @@ cLogModulePrint(const char *fmt, va_list args)
     }
     if (cLogCfg->cLogTypeMap & CLOG_TYPE_SYSLOG)
     {
-        /* TODO */
         cLogSyslogPrint(cLogBuf + off);
     }
     return;
@@ -125,7 +137,8 @@ cLogInitFile(void)
 void
 cLogInitSyslog(void)
 {
-    /*TODO*/
+    openlog(cLogCfg->appName, LOG_PID, LOG_USER);
+    cLogCfg->_isSyslogOpen = true;
 }
 
 /**
@@ -200,18 +213,15 @@ cLog(int cLogLevel, const char *fmt, ...)
 static void
 cLogDeinitFile(void)
 {
-    if (cLogCfg->_isFileOpen)
-    {
-        close (cLogCfg->_fileFd);
-    }
+    close (cLogCfg->_fileFd);
+    cLogCfg->_isFileOpen = false;
 }
 
 static void
 cLogDeinitSyslog(void)
 {
-    if (cLogCfg->_isSyslogOpen)
-    {
-    }
+    closelog();
+    cLogCfg->_isSyslogOpen = false;
 }
 
 /**
@@ -222,8 +232,15 @@ cLogDeinit(void)
 {
     if (cLogCfg)
     {
-        cLogDeinitFile();
-        cLogDeinitSyslog();
+        if (cLogCfg->_isFileOpen)
+        {
+            cLogDeinitFile();
+        }
+
+        if (cLogCfg->_isSyslogOpen)
+        {
+            cLogDeinitSyslog();
+        }
 
         free (cLogCfg);
         cLogCfg = NULL;
