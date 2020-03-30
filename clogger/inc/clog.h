@@ -11,6 +11,8 @@
 #ifndef __CLOG_H__
 #define __CLOG_H__
 
+#include <stdbool.h>
+
 #define CLOG_TYPE_CONSOLE (1 << 0)
 #define CLOG_TYPE_FILE    (1 << 1)
 #define CLOG_TYPE_SYSLOG  (1 << 2)
@@ -29,6 +31,11 @@ typedef struct cLogCfg_s
     char            appName[APP_NAME_LEN];   /* Application name */
     unsigned char   cLogTypeMap; /* bitmap: cLog_TYPE_* type */
     unsigned char   cLogLevel;   /* enum ClogLevel */
+
+    /* Internal usage */
+    int             _fileFd;
+    bool            _isFileOpen;
+    bool            _isSyslogOpen;
 } CLogCfg_t;
 
 /**

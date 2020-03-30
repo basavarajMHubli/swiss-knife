@@ -2,23 +2,74 @@
  * @file clog.c
  * @brief Controlled logging utility
  * @author Basavaraj M. Hubli
- * @version 1.0
- * @date 2020-03-24
+ * @version 2.0
+ * @date 2020-03-30
  */
 
 #include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
 #include <time.h>
 #include "clog.h"
 
-#define CLOG_BUF_SIZE   1024
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+#define CLOG_BUF_SIZE       1024
+#define CLOG_FILE_PATH      "/tmp"
+#define CLOG_MAX_FILENAME   128
 
 CLogCfg_t   *cLogCfg;
 char        *cLogBuf;
 
 extern void cLogCmdHandlerInit(void);
+
+static int
+addTimeStamp(char *clogMsg)
+{
+	int hrs, mins, sec, day, month, year, off;
+	time_t now;
+	time(&now);
+
+	struct tm *local = localtime(&now);
+
+    hrs     = local->tm_hour;
+    mins    = local->tm_min;
+    sec     = local->tm_sec;
+    day     = local->tm_mday;
+    month   = local->tm_mon + 1;   	    // get month of year (0 to 11)
+    year    = local->tm_year + 1900;    // get year since 1900
+
+    /* Prepend timestamp to new buffer */
+    off = sprintf(cLogBuf, "%d-%d-%d %02d:%02d:%02d: [%s] ", day, month, year,
+                  hrs, mins, sec, cLogCfg->appName);
+
+    return off;
+}
+
+static void
+cLogConsolePrint(char *cLogMsg)
+{
+    fprintf(stdout, "%s", cLogMsg);
+}
+
+static void
+cLogFilePrint(char *cLogMsg)
+{
+    ssize_t ret;
+
+    ret = write(cLogCfg->_fileFd, (void *)cLogMsg, strlen(cLogMsg));
+    sync();
+    (void)ret;
+}
+
+static void
+cLogSyslogPrint(char *cLogMsg)
+{
+}
 
 /**
  * @brief 
@@ -27,24 +78,11 @@ extern void cLogCmdHandlerInit(void);
  * @param args
  */
 static void
-cLogFormatPrint(const char *fmt, va_list args)
+cLogModulePrint(const char *fmt, va_list args)
 {
-	int hrs, mins, sec, day, month, year, off;
-	time_t now;
-	time(&now);
+    int off;
 
-	struct tm *local = localtime(&now);
-
-    hrs     = local->tm_hour;      	    // get hours since midnight (0-23)
-    mins    = local->tm_min;     	    // get minutes passed after the hour (0-59)
-    sec     = local->tm_sec;     	    // get seconds passed after minute (0-59)
-    day     = local->tm_mday;           // get day of month (1 to 31)
-    month   = local->tm_mon + 1;   	    // get month of year (0 to 11)
-    year    = local->tm_year + 1900;    // get year since 1900
-
-    /* Prepend timestamp to new buffer */
-    off = sprintf(cLogBuf, "%d-%d-%d %02d:%02d:%02d: [%s] ", day, month, year,
-                  hrs, mins, sec, cLogCfg->appName);
+    off = addTimeStamp(cLogBuf);
 
     /* Append log to new buffer */
     vsnprintf(cLogBuf + off, CLOG_BUF_SIZE, fmt, args);
@@ -52,17 +90,42 @@ cLogFormatPrint(const char *fmt, va_list args)
     /* Print based on type configured */
     if (cLogCfg->cLogTypeMap & CLOG_TYPE_CONSOLE)
     {
-        fprintf(stdout, "%s\n", cLogBuf);
+        cLogConsolePrint(cLogBuf);
     }
     if (cLogCfg->cLogTypeMap & CLOG_TYPE_FILE)
     {
-        /* TODO */
+        cLogFilePrint(cLogBuf);
     }
     if (cLogCfg->cLogTypeMap & CLOG_TYPE_SYSLOG)
     {
         /* TODO */
+        cLogSyslogPrint(cLogBuf + off);
     }
     return;
+}
+
+void
+cLogInitFile(void)
+{
+    char fileName[CLOG_MAX_FILENAME] = {0};
+    sprintf(fileName, "%s/%s.log", CLOG_FILE_PATH, cLogCfg->appName);
+
+    cLogCfg->_fileFd = open(fileName, O_CREAT|O_RDWR|O_APPEND, S_IRUSR|S_IWUSR);
+    if (-1 == cLogCfg->_fileFd)
+    {
+        perror("open");
+        cLogCfg->_isFileOpen = false;
+        return;
+    }
+    cLogCfg->_isFileOpen = true;
+
+    return;
+}
+
+void
+cLogInitSyslog(void)
+{
+    /*TODO*/
 }
 
 /**
@@ -95,6 +158,20 @@ cLogInit(const char *appName, int logType, int cLogLevel)
     cLogCfg->cLogTypeMap |= logType;
     cLogCfg->cLogLevel = cLogLevel;
 
+    cLogCfg->_fileFd = -1;
+    cLogCfg->_isFileOpen = false;
+    cLogCfg->_isSyslogOpen = false;
+
+    if (cLogCfg->cLogTypeMap & CLOG_TYPE_FILE)
+    {
+        cLogInitFile();
+    }
+
+    if (cLogCfg->cLogTypeMap & CLOG_TYPE_SYSLOG)
+    {
+        cLogInitSyslog();
+    }
+
     cLogCmdHandlerInit();
 
     return CLOG_OK;
@@ -116,7 +193,24 @@ cLog(int cLogLevel, const char *fmt, ...)
 
     if (cLogLevel <= cLogCfg->cLogLevel)
     {
-        cLogFormatPrint(fmt, args);
+        cLogModulePrint(fmt, args);
+    }
+}
+
+static void
+cLogDeinitFile(void)
+{
+    if (cLogCfg->_isFileOpen)
+    {
+        close (cLogCfg->_fileFd);
+    }
+}
+
+static void
+cLogDeinitSyslog(void)
+{
+    if (cLogCfg->_isSyslogOpen)
+    {
     }
 }
 
@@ -128,6 +222,9 @@ cLogDeinit(void)
 {
     if (cLogCfg)
     {
+        cLogDeinitFile();
+        cLogDeinitSyslog();
+
         free (cLogCfg);
         cLogCfg = NULL;
     }

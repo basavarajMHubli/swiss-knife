@@ -30,7 +30,7 @@ $(TARGET_LIB): $(LIB_OBJS)
 	@echo " LD $@"
 
 $(LIB_OBJS): $(LIB_SRCS)
-	$(CC) $(LIB_CFLAGS) -c $^
+	@$(CC) $(LIB_CFLAGS) -c $^
 	@echo " CC $^"
 
 $(TARGET_BIN): $(BIN_OBJS)
