@@ -65,7 +65,8 @@ static void
 displayUsage(void)
 {
     fprintf(stderr, "Usage: ./clog_ctl -p <logger name> -t <log type> -l <log level>\n");
-    fprintf(stderr, "<log type>: console/syslog/file\n");
+    fprintf(stderr, "<log type>: console/syslog/file (multiple values "
+            "with , separation is supported)\n");
     fprintf(stderr, "<log level>: info/error/debug\n");
     return;
 }
