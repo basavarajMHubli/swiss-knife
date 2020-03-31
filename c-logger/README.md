@@ -16,10 +16,17 @@ Build steps
 
 Demo app
 ========
-This code shows usage of c-logging apis.
+This code shows usage of c-logger apis.
 To build demo app,
    $ cd demo-app
    $ gcc -o demo demo.c -lclog -L./../ -I ../inc/
 
+clog_ctl
+========
+This binary lets you control log configuration in runtime.
 
-NOTE: More clear documentation will be added soon
+    Usage: ./clog_ctl -p <logger name> -t <log type> -l <log level>
+
+    <logger name>: String identifier used in cLogInit() api
+    <log type>: console/syslog/file (multiple values with , separation is supported)
+    <log level>: info/error/debug
