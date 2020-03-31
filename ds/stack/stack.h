@@ -119,8 +119,8 @@ StackPop(StackInfo *stack, void *elem)
 /**
  * @brief Shows top element of stack
  *
- * @param stack
- * @param elem
+ * @param stack ds
+ * @param elem peeked element will be stored here
  *
  * @return StackRetType
  */
@@ -166,7 +166,7 @@ IsStackFull(StackInfo *stack)
 /**
  * @brief Destroys stack data structure
  *
- * @param stack
+ * @param stack ds
  *
  * @return StackRetType
  */

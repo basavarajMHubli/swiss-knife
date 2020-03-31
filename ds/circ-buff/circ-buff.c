@@ -12,12 +12,12 @@
 #include <string.h>
 
 /**
- * @brief
+ * @brief Function to initialize circular buffer ds
  *
- * @param circ_buf
- * @param max_elem
+ * @param circ_buf to be initialized
+ * @param max_elem max elements
  *
- * @return
+ * @return CIRC_BUF_*
  */
 int
 circ_buf_init(circ_buf_t **circ_buf, int max_elem)
@@ -43,12 +43,12 @@ circ_buf_init(circ_buf_t **circ_buf, int max_elem)
 }
 
 /**
- * @brief
+ * @brief Push/Insert element into circ buff
  *
- * @param circ_buf
- * @param elem
+ * @param circ_buf ds
+ * @param elem element to be inserted/pushed
  *
- * @return
+ * @return CIRC_BUF_*
  */
 int
 circ_buf_push(circ_buf_t *circ_buf, int elem)
@@ -64,12 +64,12 @@ circ_buf_push(circ_buf_t *circ_buf, int elem)
 }
 
 /**
- * @brief
+ * @brief Pop/Remove element from circ buff
  *
- * @param circ_buf
- * @param elem
+ * @param circ_buf ds
+ * @param elem popped element
  *
- * @return
+ * @return CIRC_BUF_*
  */
 int
 circ_buf_pop(circ_buf_t *circ_buf, int *elem)
@@ -85,11 +85,11 @@ circ_buf_pop(circ_buf_t *circ_buf, int *elem)
 }
 
 /**
- * @brief
+ * @brief Function to check if circ buff is empty
  *
- * @param circ_buf
+ * @param circ_buf ds
  *
- * @return
+ * @return true if empty, else false
  */
 inline bool
 is_circ_buf_empty(circ_buf_t *circ_buf)
@@ -98,11 +98,11 @@ is_circ_buf_empty(circ_buf_t *circ_buf)
 }
 
 /**
- * @brief
+ * @brief Function to check if circ buff is full
  *
- * @param circ_buf
+ * @param circ_buf ds
  *
- * @return
+ * @return true if full, else false
  */
 inline bool
 is_circ_buf_full(circ_buf_t *circ_buf)
@@ -111,7 +111,7 @@ is_circ_buf_full(circ_buf_t *circ_buf)
 }
 
 /**
- * @brief
+ * @brief Function to deinitialize circ buff
  *
  * @param circ_buf
  *

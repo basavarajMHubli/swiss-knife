@@ -10,7 +10,7 @@
 #define CHAR_TO_IDX(c) ((unsigned int)c - (unsigned int)'a')
 
 /**
- * @brief
+ * @brief Trie api return types
  */
 typedef enum trieRetType
 {
@@ -21,7 +21,7 @@ typedef enum trieRetType
 } TrieRetType;
 
 /**
- * @brief
+ * @brief Trie node data structure
  */
 typedef struct trieNode
 {
@@ -30,9 +30,9 @@ typedef struct trieNode
 } TrieNode;
 
 /**
- * @brief
+ * @brief Create new trie node
  *
- * @return
+ * @return TRIE_*
  */
 TrieNode *createTrieNode(void)
 {
@@ -53,12 +53,12 @@ TrieNode *createTrieNode(void)
 }
 
 /**
- * @brief
+ * @brief Insert key into trie ds
  *
- * @param root
- * @param key
+ * @param root Trie ds
+ * @param key Element to be inserted
  *
- * @return
+ * @return TRIE_*
  */
 TrieRetType insertTrieNode(TrieNode *root, const char *key)
 {
@@ -90,12 +90,12 @@ TrieRetType insertTrieNode(TrieNode *root, const char *key)
 }
 
 /**
- * @brief
+ * @brief Search trie data structure for key
  *
- * @param root
- * @param key
+ * @param root Trie ds
+ * @param key Element to be searched
  *
- * @return
+ * @return TRIE_*
  */
 TrieRetType searchTrieNode(TrieNode *root, const char *key)
 {

@@ -1,4 +1,10 @@
 
+x-copy - Python utility
+=======================
+This utility compresses directories and copies into configured backup server
+
+NOTE: Remote/Backup machine must be Linux variant (Limitation)
+
 Installation
 ============
 1. Copy xcopy.cfg to /etc directory
@@ -6,7 +12,6 @@ Installation
 Configuration
 =============
 1. Configure username, ipaddr of remote machine.
-   NOTE: Remote machine must be Linux variant
 2. Configure path where backup file needs to be copied
 
 Usage

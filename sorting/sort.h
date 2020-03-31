@@ -1,6 +1,4 @@
 
-#ifndef __SORT_H__
-#define __SORT_H__
 /**
  * @file sort.h
  * @brief Sorting algorithms
@@ -9,11 +7,14 @@
  * @date 2020-02-10
  */
 
+#ifndef __SORT_H__
+#define __SORT_H__
+
 /**
-* @brief
+* @brief Function to swap two variable
 *
-* @param a
-* @param b
+* @param a args1
+* @param b args2
 */
 static void _swap(int *a, int *b)
 {
@@ -23,10 +24,10 @@ static void _swap(int *a, int *b)
 }
 
 /**
-* @brief
+* @brief Selection sort algo
 *
-* @param arr
-* @param arrLen
+* @param arr integer array
+* @param arrLen array length
 */
 static void selectionSort(int *arr, unsigned int arrLen)
 {
@@ -47,10 +48,10 @@ static void selectionSort(int *arr, unsigned int arrLen)
 }
 
 /**
-* @brief
+* @brief Insertion sort algo
 *
-* @param arr
-* @param arrLen
+* @param arr integer array
+* @param arrLen array length
 */
 static void insertionSort(int *arr, unsigned int arrLen)
 {
@@ -72,10 +73,10 @@ static void insertionSort(int *arr, unsigned int arrLen)
 }
 
 /**
-* @brief
+* @brief Bubble sort algo
 *
-* @param arr
-* @param arrLen
+* @param arr integer array
+* @param arrLen array length
 */
 static void bubbleSort(int *arr, unsigned int arrLen)
 {
@@ -92,13 +93,13 @@ static void bubbleSort(int *arr, unsigned int arrLen)
 }
 
 /**
-* @brief
+* @brief Partition function for qsort
 *
-* @param arr
-* @param low
-* @param high
+* @param arr integer array
+* @param low lower index
+* @param high higher index
 *
-* @return
+* @return pivot index
 */
 static int _partition(int *arr, int low, int high)
 {
@@ -118,11 +119,11 @@ static int _partition(int *arr, int low, int high)
 }
 
 /**
- * @brief
+ * @brief Quick sort algo
  *
- * @param arr
- * @param low
- * @param high
+ * @param arr integer array
+ * @param low low index
+ * @param high high index
  */
 static void quickSort(int *arr, int low, int high)
 {

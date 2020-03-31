@@ -13,7 +13,7 @@
 #include <stdbool.h>
 
 /**
- * @brief
+ * @brief Return type
  */
 typedef enum circ_buf_err {
     CIRC_BUF_NOERR  = 0,
@@ -23,7 +23,7 @@ typedef enum circ_buf_err {
 } circ_buf_err_t;
 
 /**
- * @brief
+ * @brief Structure to hold circ buff ds
  */
 typedef struct circ_buf {
     int head;
