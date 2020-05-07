@@ -2,7 +2,7 @@
 C-Logger
 ========
 
-C-Logger(Controlled logger) is C shared library which supports runtime controlled logging features
+C-Logger(Controlled logger) is C shared library which supports runtime controllable log level
 
 This library comes with clog_ctl utility which can be used for log configuration in runtime
 
